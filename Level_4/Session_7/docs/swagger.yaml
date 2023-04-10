@@ -1,0 +1,60 @@
+definitions:
+  dtos.CreateUserRequest:
+    properties:
+      confirmPassword:
+        minLength: 5
+        type: string
+      email:
+        type: string
+      nickname:
+        type: string
+      password:
+        minLength: 5
+        type: string
+      username:
+        type: string
+    required:
+    - confirmPassword
+    - email
+    - password
+    - username
+    type: object
+info:
+  contact: {}
+paths:
+  /user:
+    post:
+      consumes:
+      - application/json
+      description: Add new fake User Account
+      parameters:
+      - description: User
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dtos.CreateUserRequest'
+      produces:
+      - application/json
+      responses: {}
+      summary: Post User Data
+      tags:
+      - User
+  /user/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get Dummy User Account
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses: {}
+      summary: Get User Data
+      tags:
+      - User
+swagger: "2.0"
