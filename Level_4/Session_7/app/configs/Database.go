@@ -2,10 +2,12 @@ package configs
 
 import (
 	"log"
+	"os"
 	"sync"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	model "idstar.com/session7/app/models"
 )
@@ -14,6 +16,13 @@ var once sync.Once
 var DB *gorm.DB
 
 const dbIds = "ptids"
+
+var customLogger = logger.New(
+	log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+	logger.Config{
+		LogLevel: logger.Info, // Log level
+	},
+)
 
 func InitDB() {
 	once.Do(func() {
@@ -56,6 +65,7 @@ func InitDB() {
 
 		dsn = "host=localhost user=postgres password=Admin123$ dbname=" + dbIds + " port=5432 sslmode=disable TimeZone=Asia/Jakarta"
 		db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
+			Logger: customLogger,
 			NamingStrategy: schema.NamingStrategy{
 				SingularTable: true,
 			},
