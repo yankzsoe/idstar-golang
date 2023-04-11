@@ -36,8 +36,41 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dtos.CreateUserRequest"
+                            "$ref": "#/definitions/dtos.CreateOrUpdateUserRequest"
                         }
+                    }
+                ],
+                "responses": {}
+            }
+        },
+        "/user/": {
+            "get": {
+                "description": "Get All User Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Get All User Data",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "offset",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "where",
+                        "in": "query"
                     }
                 ],
                 "responses": {}
@@ -45,7 +78,7 @@ const docTemplate = `{
         },
         "/user/{id}": {
             "get": {
-                "description": "Get Dummy User Account",
+                "description": "Get User Account",
                 "consumes": [
                     "application/json"
                 ],
@@ -61,6 +94,60 @@ const docTemplate = `{
                         "type": "string",
                         "description": "ID",
                         "name": "id",
+                        "in": "path"
+                    }
+                ],
+                "responses": {}
+            },
+            "put": {
+                "description": "Update User Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Put User Data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dtos.CreateOrUpdateUserRequest"
+                        }
+                    }
+                ],
+                "responses": {}
+            },
+            "delete": {
+                "description": "Delete User Account",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Delete User Data",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -70,7 +157,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "dtos.CreateUserRequest": {
+        "dtos.CreateOrUpdateUserRequest": {
             "type": "object",
             "required": [
                 "confirmPassword",

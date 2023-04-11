@@ -2,9 +2,12 @@ package repositories
 
 import (
 	"errors"
+	"time"
 
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 	config "idstar.com/session7/app/configs"
+	"idstar.com/session7/app/dtos"
 	"idstar.com/session7/app/models"
 )
 
@@ -26,6 +29,15 @@ func (repo *UserRepository) Create(user *models.UserModel) (*models.UserModel, e
 	return user, nil
 }
 
+func (repo *UserRepository) FindAll(param dtos.CommonParam) (*[]models.UserModel, error) {
+	var user []models.UserModel
+	result := repo.DB.Where("username LIKE ?", "%"+param.Where+"%").Limit(param.Limit).Offset(param.Offset).Find(&user)
+	if result.Error != nil {
+		return nil, errors.New("failed to find user")
+	}
+	return &user, nil
+}
+
 func (repo *UserRepository) FindByID(id string) (*models.UserModel, error) {
 	var user models.UserModel
 	result := repo.DB.Where("id = ?", id).Find(&user)
@@ -35,18 +47,29 @@ func (repo *UserRepository) FindByID(id string) (*models.UserModel, error) {
 	return &user, nil
 }
 
-func (repo *UserRepository) Update(user *models.UserModel) error {
-	result := repo.DB.Save(user)
-	if result.Error != nil {
+func (repo *UserRepository) Update(userId string, user dtos.CreateOrUpdateUserRequest) error {
+	tNow := time.Now()
+	if err := repo.DB.Model(models.UserModel{}).Where("id = ?", userId).Updates(models.UserModel{
+		Username:    user.Username,
+		Nickname:    user.Nickname,
+		Email:       user.Email,
+		Password:    user.ConfirmPassword,
+		UpdatedDate: &tNow,
+	}).Error; err != nil {
 		return errors.New("failed to update user")
 	}
 	return nil
 }
 
-func (repo *UserRepository) Delete(user *models.UserModel) error {
-	result := repo.DB.Delete(user)
-	if result.Error != nil {
+func (repo *UserRepository) Delete(userId string) error {
+	user := models.UserModel{}
+	if err := repo.DB.Clauses(clause.Returning{}).Delete(&user, "id", userId).Error; err != nil {
 		return errors.New("failed to delete user")
 	}
+
+	if user.Id == "" {
+		return errors.New("user not found")
+	}
+
 	return nil
 }

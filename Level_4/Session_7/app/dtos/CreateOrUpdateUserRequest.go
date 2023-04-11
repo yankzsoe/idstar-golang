@@ -4,7 +4,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type CreateUserRequest struct {
+type CreateOrUpdateUserRequest struct {
 	Username        string `json:"username" validate:"required"`
 	Nickname        string `json:"nickname"`
 	Email           string `json:"email" validate:"required,email"`
@@ -12,7 +12,7 @@ type CreateUserRequest struct {
 	ConfirmPassword string `json:"confirmPassword" validate:"required,min=5,eqfield=Password"`
 }
 
-func (c *CreateUserRequest) Validate() error {
+func (c *CreateOrUpdateUserRequest) Validate() error {
 	validate := validator.New()
 	err := validate.Struct(c)
 

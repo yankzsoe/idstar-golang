@@ -33,7 +33,10 @@ func SetupRouter() *gin.Engine {
 		employee := v1.Group("/user")
 		{
 			employee.GET("/:id", userCtrl.GetUser)
+			employee.GET("", userCtrl.GetAllUser)
 			employee.POST("", userCtrl.PostUser)
+			employee.PUT("/:id", userCtrl.PutUser)
+			employee.DELETE("/:id", userCtrl.DeleteUser)
 		}
 
 	}
