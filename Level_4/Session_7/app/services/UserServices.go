@@ -38,12 +38,12 @@ func (u *UserService) GetAllUser(param dtos.CommonParam) (*[]models.UserModel, e
 
 func (u *UserService) UpdateUser(userId string, user dtos.CreateOrUpdateUserRequest) error {
 	aes128 := tools.Aes128{}
+	// encrypt before save to db
 	encryptedPassword, err := aes128.Encrypt(user.ConfirmPassword)
 	if err != nil {
 		return err
 	}
 
-	// Simpan user ke database
 	user.ConfirmPassword = *encryptedPassword
 	return u.userRepository.Update(userId, user)
 }

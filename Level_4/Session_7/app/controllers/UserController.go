@@ -195,5 +195,5 @@ func (ctrl *UserController) DeleteUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, gin.H{"data": "Update Successfully"})
+	ctx.JSON(http.StatusOK, gin.H{"data": "Delete Successfully"})
 }
