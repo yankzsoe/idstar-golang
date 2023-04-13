@@ -43,7 +43,7 @@ func SetupRouter() *gin.Engine {
 
 		auth := v1.Group("/auth")
 		{
-			auth.POST("/login", authCtrl.Login)
+			auth.POST("/requestToken", authCtrl.Login)
 		}
 
 	}

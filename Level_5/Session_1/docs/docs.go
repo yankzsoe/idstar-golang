@@ -10,15 +10,23 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/auth/login": {
+        "/auth/requestToken": {
             "post": {
-                "description": "Login user to authorization",
+                "description": "Request Token for Authorization",
                 "consumes": [
                     "application/json"
                 ],
@@ -28,7 +36,7 @@ const docTemplate = `{
                 "tags": [
                     "Authentication"
                 ],
-                "summary": "Login user",
+                "summary": "Request Token user",
                 "parameters": [
                     {
                         "description": "body",
@@ -45,6 +53,11 @@ const docTemplate = `{
         },
         "/user/": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get All User Account",
                 "consumes": [
                     "application/json"
@@ -76,6 +89,11 @@ const docTemplate = `{
                 "responses": {}
             },
             "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Add new fake User Account",
                 "consumes": [
                     "application/json"
@@ -103,6 +121,11 @@ const docTemplate = `{
         },
         "/user/{id}": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Get User Account",
                 "consumes": [
                     "application/json"
@@ -125,6 +148,11 @@ const docTemplate = `{
                 "responses": {}
             },
             "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Update User Account",
                 "consumes": [
                     "application/json"
@@ -157,6 +185,11 @@ const docTemplate = `{
                 "responses": {}
             },
             "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "Delete User Account",
                 "consumes": [
                     "application/json"
@@ -220,6 +253,13 @@ const docTemplate = `{
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "ApiKeyAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

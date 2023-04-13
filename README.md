@@ -13,7 +13,7 @@ Level 4 <br>
 - [x] Session 7 - [CRUD dengan GORM (GO ORM)](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_4/Session_7) <br>
  <br>
 Level 5 <br>
-- [ ] Session 1 - [Mengenal JWT]() <br>
+- [x] Session 1 - [Mengenal JWT]() <br>
 - [ ] Session 2 - [Setup JWT dengan Claims Custom (Roles)]() <br>
 - [ ] Session 3 - [Membangun Middleware Check Token]() <br>
 - [ ] Session 4 - [Membuat Pattern untuk semua response]() <br>

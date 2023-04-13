@@ -1,9 +1,11 @@
 package controllers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v5"
 	"idstar.com/session8/app/dtos"
 	"idstar.com/session8/app/models"
 	"idstar.com/session8/app/services"
@@ -27,9 +29,11 @@ func NewUserController(service *services.UserService) *UserController {
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
+//	@Security		ApiKeyAuth
 //	@Param			id	path	string	false	"ID"
 //	@Router			/user/{id} [get]
 func (ctrl *UserController) GetUser(ctx *gin.Context) {
+	CheckToken(ctx)
 	req := dtos.GetUserByID{
 		Id: ctx.Param("id"),
 	}
@@ -63,11 +67,16 @@ func (ctrl *UserController) GetUser(ctx *gin.Context) {
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
+//	@Security		ApiKeyAuth
 //	@Param			request	query	dtos.CommonParam	false	"param"
 //	@Router			/user/ [get]
 func (ctrl *UserController) GetAllUser(ctx *gin.Context) {
-	conv := tools.Conversion{}
+	if err := CheckToken(ctx); err != nil {
+		ctx.JSON(http.StatusUnauthorized, gin.H{"error": err.Error()})
+		return
+	}
 
+	conv := tools.Conversion{}
 	req := dtos.CommonParam{
 		Where:  ctx.Query("username"),
 		Limit:  conv.StrToInt(ctx.Query("limit")),
@@ -77,6 +86,7 @@ func (ctrl *UserController) GetAllUser(ctx *gin.Context) {
 	result, err := ctrl.service.GetAllUser(req)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	users := []dtos.CreateUserResponse{}
@@ -101,9 +111,11 @@ func (ctrl *UserController) GetAllUser(ctx *gin.Context) {
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
+//	@Security		ApiKeyAuth
 //	@Param			request	body	dtos.CreateOrUpdateUserRequest	true	"User"
 //	@Router			/user/ [post]
 func (ctrl *UserController) PostUser(ctx *gin.Context) {
+	CheckToken(ctx)
 	req := dtos.CreateOrUpdateUserRequest{}
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -125,6 +137,7 @@ func (ctrl *UserController) PostUser(ctx *gin.Context) {
 	result, err := ctrl.service.CreateUser(&m)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	createdUser := dtos.CreateUserResponse{
@@ -146,10 +159,12 @@ func (ctrl *UserController) PostUser(ctx *gin.Context) {
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
+//	@Security		ApiKeyAuth
 //	@Param			id		path	string							true	"User ID"
 //	@Param			request	body	dtos.CreateOrUpdateUserRequest	true	"User"
 //	@Router			/user/{id} [put]
 func (ctrl *UserController) PutUser(ctx *gin.Context) {
+	CheckToken(ctx)
 	req := dtos.CreateOrUpdateUserRequest{}
 	if err := ctx.ShouldBindJSON(&req); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -158,6 +173,7 @@ func (ctrl *UserController) PutUser(ctx *gin.Context) {
 	var userId string = ctx.Param("id")
 	if userId == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid User ID"})
+		return
 	}
 
 	if err := req.Validate(); err != nil {
@@ -181,12 +197,15 @@ func (ctrl *UserController) PutUser(ctx *gin.Context) {
 //	@Tags			User
 //	@Accept			json
 //	@Produce		json
+//	@Security		ApiKeyAuth
 //	@Param			id	path	string	true	"User ID"
 //	@Router			/user/{id} [delete]
 func (ctrl *UserController) DeleteUser(ctx *gin.Context) {
+	CheckToken(ctx)
 	var userId string = ctx.Param("id")
 	if userId == "" {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid User ID"})
+		return
 	}
 
 	err := ctrl.service.DeleteUser(userId)
@@ -196,4 +215,36 @@ func (ctrl *UserController) DeleteUser(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"data": "Update Successfully"})
+}
+
+const key = "abcdefghij1234567890"
+
+func CheckToken(c *gin.Context) error {
+
+	// Get token from header
+	authHeader := c.GetHeader("Authorization")
+	if authHeader == "" {
+		return errors.New("Missing Header 'Authorization'")
+	}
+
+	jwtKey := []byte(key)
+	// Verify token
+	tokenString := authHeader[len("Bearer "):]
+	token, err := jwt.ParseWithClaims(tokenString, &dtos.Claims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, jwt.ErrInvalidKey
+		}
+		return jwtKey, nil
+	})
+
+	if err != nil {
+		return err
+	}
+
+	_, ok := token.Claims.(*dtos.Claims)
+	if !ok || !token.Valid {
+		return errors.New("Not Authorize")
+	}
+
+	return nil
 }

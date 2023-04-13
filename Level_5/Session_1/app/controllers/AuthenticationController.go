@@ -18,15 +18,15 @@ func NewAuthenticationController(service *services.AuthenticationService) *Authe
 	}
 }
 
-// Login godoc
+// RequestToken godoc
 //
-//	@Summary		Login user
-//	@Description	Login user to authorization
+//	@Summary		Request Token user
+//	@Description	Request Token for Authorization
 //	@Tags			Authentication
 //	@Accept			json
 //	@Produce		json
 //	@Param			request	body	dtos.LoginRequest	true	"body"
-//	@Router			/auth/login [post]
+//	@Router			/auth/requestToken [post]
 func (ctrl *AuthenticationController) Login(ctx *gin.Context) {
 	req := dtos.LoginRequest{}
 
@@ -35,11 +35,11 @@ func (ctrl *AuthenticationController) Login(ctx *gin.Context) {
 		return
 	}
 
-	statusCode, err := ctrl.service.Login(req)
+	statusCode, token, err := ctrl.service.Login(req)
 	if err != nil {
 		ctx.JSON(statusCode, gin.H{"error": err.Error()})
 		return
 	}
 
-	ctx.JSON(statusCode, gin.H{"data": "Successfully"})
+	ctx.JSON(statusCode, gin.H{"data": token})
 }
