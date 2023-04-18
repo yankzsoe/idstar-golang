@@ -15,8 +15,8 @@ each level has multiple sessions. <br>
 <b>Level 5</b>
 
 - [x] Session 1 - [Mengenal JWT](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_5/Session_1) <br>
-- [x] Session 2 - [Setup JWT dengan Claims Custom (Roles)]() <br>
-- [ ] Session 3 - [Membangun Middleware Check Token]() <br>
+- [x] Session 2 - [Setup JWT dengan Claims Custom (Roles)](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_5/Session_2) <br>
+- [x] Session 3 - [Membangun Middleware JWT Check Token](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_5/Session_3) <br>
 - [ ] Session 4 - [Membuat Pattern untuk semua response]() <br>
 - [ ] Session 5 - [Handling semua jenis Error like Expert]() <br>
 - [ ] Session 6 - [CICD Deployment GO Project on GAE]() <br>
