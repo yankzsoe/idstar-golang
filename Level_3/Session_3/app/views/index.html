@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ .title }}</title>
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css">
+</head>
+<body>
+    <div style="text-align: center;">
+        <h1>{{ .title }}</h1>
+        <h3>{{ .description }}</h3>
+    </div>
+
+    <!-- Send Parameter on Body -->
+    <form class="container" action="/result" method="POST">
+        <div class="mb-3">
+            <label for="input1A" class="form-label">Example label</label>
+            <input type="text" class="form-control" id="input1A" name="input1A" placeholder="Example input placeholder">
+          </div>
+          <div class="mb-3">
+            <label for="input2A" class="form-label">Another label</label>
+            <input type="text" class="form-control" id="input2A" name="input2A" placeholder="Another input placeholder">
+          </div>
+          <button type="submit" class="btn btn-primary mt-4">Send On Body</button>
+    </form>
+
+    <!-- Send Parameter on Query URL -->
+    <form class="container" action="/result" method="GET">
+        <div class="mb-3">
+            <label for="input1B" class="form-label">Example label</label>
+            <input type="text" class="form-control" id="input1B" name="input1B" placeholder="Example input placeholder">
+          </div>
+          <div class="mb-3">
+            <label for="input2B" class="form-label">Another label</label>
+            <input type="text" class="form-control" id="input2B" name="input2B" placeholder="Another input placeholder">
+          </div>
+          <button type="submit" class="btn btn-primary mt-4">Send On Query URL</button>
+    </form>
+
+    <!-- Send Parameter on URL without Query-->
+    <form class="container">
+        <div class="mb-3">
+            <label for="input1C" class="form-label">Example label</label>
+            <input type="text" class="form-control" id="input1C" name="input1C" placeholder="Example input placeholder">
+          </div>
+          <div class="mb-3">
+            <label for="input2C" class="form-label">Another label</label>
+            <input type="text" class="form-control" id="input2C" name="input2C" placeholder="Another input placeholder">
+          </div>
+          <a type="submit" onclick="submitForm()" class="btn btn-primary mt-4">Send On URL without Query</a>
+    </form>
+</body>
+<script>
+    function submitForm() {
+      const input1 = document.getElementById('input1C').value;
+      const input2 = document.getElementById('input2C').value;
+      const url = `/result/${input1}/${input2}`;
+      window.location.href = url;
+    }
+  </script>
+</html>
