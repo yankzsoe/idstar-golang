@@ -1,0 +1,14 @@
+{{define "content"}}
+<div class="container mt-5">
+    <h1>Gin CRUD App - Detail Todo</h1>
+    <div class="form-group mt-4">
+        <label for="title">Title</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ .todo.Title }}" readonly>
+    </div>
+    <div class="form-group mt-4">
+        <label for="description">Description</label>
+        <input type="text" class="form-control" id="description" name="description" value="{{ .todo.Description }}" readonly>
+    </div>
+    <a href="/todo" class="btn btn-info mt-4">Back</a>
+</div>
+{{end}}

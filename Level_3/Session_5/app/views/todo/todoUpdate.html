@@ -1,0 +1,18 @@
+{{define "content"}}
+<div class="container mt-5">
+    <h1>Gin CRUD App - Update Todo</h1>
+        <form action="/todo/update" method="POST">
+            <input type="hidden" id="todoId" name="todoId" value="{{ .todo.Model.ID }}">
+            <div class="form-group mt-4">
+                <label for="title">Title</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ .todo.Title }}">
+            </div>
+            <div class="form-group mt-4">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" name="description" value="{{ .todo.Description }}">
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Update</button>
+            <a href="/todo" class="btn btn-info mt-4">Cancel</a>
+        </form>
+</div>
+{{end}}

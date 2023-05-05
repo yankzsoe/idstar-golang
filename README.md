@@ -9,8 +9,7 @@ each level has multiple sessions. <br>
 - [x] Session 2 - [Styling dengan Bootstrap](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_3/Session_2) <br>
 - [x] Session 3 - [Request dan Routing](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_3/Session_3) <br>
 - [x] Session 4 - [Partials Views & Templates](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_3/Session_4) <br>
-- [ ] Session 5 - [Database Sqlite dengan GORM](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_3/Session_5) <br>
-- [ ] Session 6 - [CRUD Todos](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_3/Session_6) <br>
+- [x] Session 5 - [CRUD dengan Sqlite Menggunakan GORM](https://github.com/yankzsoe/idtsar-golang/tree/main/Level_3/Session_5) <br>
 <br>
 <b>Level 4</b> <br>
 
